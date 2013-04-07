@@ -14,6 +14,14 @@
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	android:text="@string/oldfriend_contact" />
-    
-
+    <Button 
+        android:id="@+id/show_preference_menu"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="@string/preference_menu" />
+     <Button 
+        android:id="@+id/show_user_account"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:text="@string/user_account" />
 </LinearLayout>
