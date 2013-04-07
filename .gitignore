@@ -1,0 +1,28 @@
+*.class
+
+# Package Files #
+*.dex
+*.war
+*.ear
+*.apk
+bin/
+bin
+gen/
+release/
+release
+gen
+.metadata/
+.metadata
+*.project
+
+# package
+*.gz
+*.tar
+*.rar
+*.zip
+
+# non interested projects
+android_framework/
+pedometer/
+Phone/
+icon_templates/
