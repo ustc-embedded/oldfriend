@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.oldfriend.ui.slidingmenu.lib.SlidingMenu;
 import com.oldfriend.ui.slidingmenu.lib.app.SlidingFragmentActivity;
 
+// TODO 横屏的时候有bug
+// TODO 没有实现单击图标打开侧边栏的功能
 public class OldFriendActivity extends SlidingFragmentActivity 
 			implements MenuFragment.OnMenuItemSelectedListener
 {
@@ -28,7 +30,8 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		setTitle(mTitleRes);
 		
 		setContentView(R.layout.content_frame);
-		setContentFragment(new SampleListFragment(),false);
+		//setContentFragment(new SampleListFragment(),false);
+		setContentFragment(new LocalContactFragment(),false);
 		
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
