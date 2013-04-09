@@ -11,6 +11,14 @@
     <string name="preference_menu">设置</string>
     <string name="user_account">账户管理</string>
     
+    <!-- used in group fragment -->
+    <string name="no_groups">您现在还没有分组哦！</string>
+    <string name="create_group">新建分组</string>
+    <string name="without_group">未分组</string>
+    <string name="group_list">群组</string>
+    <string name="member_list">联系人</string>
+    <string name="all_contacts">所有联系人</string>
+    
     <string name="start_oldfriend">打开软件</string>
     
 </resources>

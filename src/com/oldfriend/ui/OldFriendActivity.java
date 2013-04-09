@@ -1,5 +1,6 @@
 package com.oldfriend.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,11 +11,12 @@ import android.widget.Toast;
 
 import com.oldfriend.ui.slidingmenu.lib.SlidingMenu;
 import com.oldfriend.ui.slidingmenu.lib.app.SlidingFragmentActivity;
-
+import com.oldfriend.group.*;
 // TODO 横屏的时候有bug
 // TODO 没有实现单击图标打开侧边栏的功能
 public class OldFriendActivity extends SlidingFragmentActivity 
-			implements MenuFragment.OnMenuItemSelectedListener
+			implements MenuFragment.OnMenuItemSelectedListener,
+			GroupBrowseListFragment.OnGroupBrowserActionListener
 {
 	public static final String TAG = "SlidingFragmentActivity";
 	public static final boolean DEBUG = true;
@@ -36,7 +38,8 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
 			//mFrag = (Fragment)new SampleListFragment();
-			mFrag = (Fragment)new MenuFragment();
+			//mFrag = (Fragment)new MenuFragment();
+			mFrag = (Fragment) new GroupBrowseListFragment();
 		} else {
 			mFrag = (ListFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
 		}
@@ -108,6 +111,13 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		// TODO Auto-generated method stub
 		Toast.makeText(this, "show user account", Toast.LENGTH_SHORT).show();
 	}
+
+	@Override
+	public void onViewGroupAction(Uri groupUri) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	
 }
