@@ -24,6 +24,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract.Groups;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ import android.widget.TextView;
  */
 public class GroupBrowseListAdapter extends BaseAdapter {
 
+	private final static String TAG = "GroupBrowseListAdapter";
+	private final static boolean DEBUG = true;
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
 //    private final AccountTypeManager mAccountTypeManager;
@@ -143,6 +146,9 @@ public class GroupBrowseListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+    	if(DEBUG){
+    		Log.v(TAG, "in getView()");
+    	}
         GroupListItem entry = getItem(position);
         View result;
         GroupListItemViewCache viewCache;
@@ -195,6 +201,9 @@ public class GroupBrowseListAdapter extends BaseAdapter {
         if (mSelectionVisible) {
             result.setActivated(isSelectedGroup(groupUri));
         }
+        if(DEBUG){
+    		Log.v(TAG, "in getView()");
+    	}
         return result;
     }
 

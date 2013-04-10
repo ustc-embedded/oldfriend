@@ -16,9 +16,10 @@
 package com.oldfriend.group;
 
 import android.content.Context;
-import android.content.CursorLoader;
+import android.support.v4.content.CursorLoader;
 import android.net.Uri;
 import android.provider.ContactsContract.Groups;
+
 
 /**
  * Group loader for the group list that includes details such as the number of contacts per group
@@ -47,9 +48,12 @@ public final class GroupListLoader extends CursorLoader {
     private static final Uri GROUP_LIST_URI = Groups.CONTENT_SUMMARY_URI;
 
     public GroupListLoader(Context context) {
-        super(context, GROUP_LIST_URI, COLUMNS, Groups.ACCOUNT_TYPE + " NOT NULL AND "
+/*        super(context, GROUP_LIST_URI, COLUMNS, Groups.ACCOUNT_TYPE + " NOT NULL AND "
                 + Groups.ACCOUNT_NAME + " NOT NULL AND " + Groups.AUTO_ADD + "=0 AND " +
                 Groups.FAVORITES + "=0 AND " + Groups.DELETED + "=0", null,
+                Groups.ACCOUNT_TYPE + ", " + Groups.ACCOUNT_NAME + ", " + Groups.DATA_SET + ", " +
+                Groups.TITLE + " COLLATE LOCALIZED ASC");*/
+    	super(context, GROUP_LIST_URI, COLUMNS, null, null,
                 Groups.ACCOUNT_TYPE + ", " + Groups.ACCOUNT_NAME + ", " + Groups.DATA_SET + ", " +
                 Groups.TITLE + " COLLATE LOCALIZED ASC");
     }

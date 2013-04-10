@@ -34,12 +34,13 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		setContentView(R.layout.content_frame);
 		//setContentFragment(new SampleListFragment(),false);
 		setContentFragment(new LocalContactFragment(),false);
+		//setContentFragment(new GroupBrowseListFragment(),false);
 		
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
 			//mFrag = (Fragment)new SampleListFragment();
 			//mFrag = (Fragment)new MenuFragment();
-			mFrag = (Fragment) new GroupBrowseListFragment();
+			mFrag = new GroupBrowseListFragment();
 		} else {
 			mFrag = (ListFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
 		}

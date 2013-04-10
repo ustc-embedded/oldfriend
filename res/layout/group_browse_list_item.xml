@@ -40,7 +40,7 @@
         android:layout_height="1dip"
         android:layout_marginRight="?attr/list_item_padding_right"
         android:background="?android:attr/listDivider" />
-
+<!--
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,8 @@
         android:paddingLeft="8dip"
         android:paddingBottom="8dip"
         android:duplicateParentState="true" >
-<!-- android:background="@drawable/group_list_item_background" -->        
+ 		android:background="@drawable/group_list_item_background" 
+ -->        
         
 
         <LinearLayout
@@ -56,8 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="?attr/list_item_padding_right"
             android:orientation="horizontal"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true">
+            >
 
             <TextView
                 android:id="@+id/label"
@@ -79,5 +79,7 @@
                 android:singleLine="true" />
 
         </LinearLayout>
-    </RelativeLayout>
+<!-- 
+        </RelativeLayout>
+-->
 </LinearLayout>

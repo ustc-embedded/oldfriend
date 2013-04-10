@@ -21,16 +21,18 @@ import com.oldfriend.ui.R;
 import com.oldfriend.widget.AutoScrollListView;
 
 import android.app.Activity;
-import android.app.LoaderManager;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
-import android.content.CursorLoader;
-import android.content.Loader;
+
 import android.database.Cursor;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -64,7 +66,7 @@ public class GroupBrowseListFragment extends Fragment
     }
 
     private static final String TAG = "GroupBrowseListFragment";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private static final int LOADER_GROUPS = 1;
 
@@ -177,8 +179,14 @@ public class GroupBrowseListFragment extends Fragment
 
     @Override
     public void onStart() {
+    	if (DEBUG) {
+    		Log.d(TAG, "onStart() begin");    		
+    	}
         getLoaderManager().initLoader(LOADER_GROUPS, null, mGroupLoaderListener);
         super.onStart();
+        if (DEBUG) {
+    		Log.d(TAG, "onStart() end");    		
+    	}
     }
 
     /**
@@ -188,7 +196,7 @@ public class GroupBrowseListFragment extends Fragment
             new LoaderCallbacks<Cursor>() {
 
         @Override
-        public CursorLoader onCreateLoader(int id, Bundle args) {
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             mEmptyView.setVisibility(View.GONE);
             return new GroupListLoader(mContext);
         }
