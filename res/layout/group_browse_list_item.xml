@@ -36,4 +36,9 @@
                 android:ellipsize="end"
                 android:singleLine="true" />
     </RelativeLayout>
+    <FrameLayout 
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/group_member_frame" />
+    
 </LinearLayout>

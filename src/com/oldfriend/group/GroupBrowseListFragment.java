@@ -17,6 +17,7 @@
 package com.oldfriend.group;
 
 import com.oldfriend.group.GroupBrowseListAdapter.GroupListItemViewCache;
+import com.oldfriend.ui.LocalContactFragment;
 import com.oldfriend.ui.R;
 import com.oldfriend.widget.AutoScrollListView;
 
@@ -28,6 +29,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -198,7 +200,10 @@ public class GroupBrowseListFragment extends Fragment
 
     private void viewGroup(Uri groupUri) {
         setSelectedGroup(groupUri);
-        
+        FragmentTransaction ft = this.getChildFragmentManager().beginTransaction();
+		ft.replace(R.id.group_member_frame, new LocalContactFragment());
+		ft.addToBackStack(null);
+		ft.commit();
     }
 
     public void setSelectedUri(Uri groupUri) {
