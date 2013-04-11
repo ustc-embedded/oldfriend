@@ -32,8 +32,8 @@
       android:layout_weight="1"
       android:fadingEdge="none"
       android:cacheColorHint="@android:color/transparent"
-      android:divider="@null"
-      android:listSelector="@android:color/transparent"/>
+      android:divider="@android:drawable/divider_horizontal_bright"
+      android:listSelector="@color/list_item_selected"/>
 
     <LinearLayout
       android:id="@+id/no_groups"

@@ -38,6 +38,7 @@ public class GroupBrowseListAdapter extends BaseAdapter {
 
 	private final static String TAG = "GroupBrowseListAdapter";
 	private final static boolean DEBUG = true;
+	
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
 //    private final AccountTypeManager mAccountTypeManager;
@@ -126,19 +127,20 @@ public class GroupBrowseListAdapter extends BaseAdapter {
         // Figure out if this is the first group for this account name / account type pair by
         // checking the previous entry. This is to determine whether or not we need to display an
         // account header in this item.
-        int previousIndex = position - 1;
-        boolean isFirstGroupInAccount = true;
-        if (previousIndex >= 0 && mCursor.moveToPosition(previousIndex)) {
-            String previousGroupAccountName = mCursor.getString(GroupListLoader.ACCOUNT_NAME);
-            String previousGroupAccountType = mCursor.getString(GroupListLoader.ACCOUNT_TYPE);
-            String previousGroupDataSet = mCursor.getString(GroupListLoader.DATA_SET);
-
-            if (accountName.equals(previousGroupAccountName) &&
-                    accountType.equals(previousGroupAccountType) &&
-                    dataSet.equals(previousGroupDataSet)) {
-                isFirstGroupInAccount = false;
-            }
-        }
+//        int previousIndex = position - 1;
+//        boolean isFirstGroupInAccount = true;
+        boolean isFirstGroupInAccount = false;
+//        if (previousIndex >= 0 && mCursor.moveToPosition(previousIndex)) {
+//            String previousGroupAccountName = mCursor.getString(GroupListLoader.ACCOUNT_NAME);
+//            String previousGroupAccountType = mCursor.getString(GroupListLoader.ACCOUNT_TYPE);
+//            String previousGroupDataSet = mCursor.getString(GroupListLoader.DATA_SET);
+//
+//            if (accountName.equals(previousGroupAccountName) &&
+//                    accountType.equals(previousGroupAccountType) &&
+//                    dataSet.equals(previousGroupDataSet)) {
+//                isFirstGroupInAccount = false;
+//            }
+//        }
 
         return new GroupListItem(accountName, accountType, dataSet, groupId, title,
                 isFirstGroupInAccount, memberCount);
@@ -146,10 +148,8 @@ public class GroupBrowseListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-    	if(DEBUG){
-    		Log.v(TAG, "in getView()");
-    	}
         GroupListItem entry = getItem(position);
+
         View result;
         GroupListItemViewCache viewCache;
         if (convertView != null) {
@@ -182,11 +182,6 @@ public class GroupBrowseListAdapter extends BaseAdapter {
             viewCache.accountHeaderExtraTopPadding.setVisibility(View.GONE);
         }
         */
-        if (position != 0) {
-        	viewCache.divider.setVisibility(View.VISIBLE);
-        } else {
-        	viewCache.divider.setVisibility(View.GONE);
-        }
 
         // Bind the group data
         Uri groupUri = getGroupUriFromId(entry.getGroupId());
@@ -202,7 +197,7 @@ public class GroupBrowseListAdapter extends BaseAdapter {
             result.setActivated(isSelectedGroup(groupUri));
         }
         if(DEBUG){
-    		Log.v(TAG, "in getView()");
+    		Log.d(TAG, "getView() return");
     	}
         return result;
     }
@@ -221,13 +216,11 @@ public class GroupBrowseListAdapter extends BaseAdapter {
     public static class GroupListItemViewCache {
         public final TextView groupTitle;
         public final TextView groupMemberCount;
-        public final View divider;
         private Uri mUri;
 
         public GroupListItemViewCache(View view) {
             groupTitle = (TextView) view.findViewById(R.id.label);
             groupMemberCount = (TextView) view.findViewById(R.id.count);
-            divider = view.findViewById(R.id.divider);
         }
 
         public void setUri(Uri uri) {

@@ -15,8 +15,7 @@ import com.oldfriend.group.*;
 // TODO 横屏的时候有bug
 // TODO 没有实现单击图标打开侧边栏的功能
 public class OldFriendActivity extends SlidingFragmentActivity 
-			implements MenuFragment.OnMenuItemSelectedListener,
-			GroupBrowseListFragment.OnGroupBrowserActionListener
+			implements MenuFragment.OnMenuItemSelectedListener
 {
 	public static final String TAG = "SlidingFragmentActivity";
 	public static final boolean DEBUG = true;
@@ -33,14 +32,14 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		
 		setContentView(R.layout.content_frame);
 		//setContentFragment(new SampleListFragment(),false);
-		setContentFragment(new LocalContactFragment(),false);
-		//setContentFragment(new GroupBrowseListFragment(),false);
+		//setContentFragment(new LocalContactFragment(),false);
+		setContentFragment(new GroupBrowseListFragment(),false);
 		
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
 			//mFrag = (Fragment)new SampleListFragment();
-			//mFrag = (Fragment)new MenuFragment();
-			mFrag = new GroupBrowseListFragment();
+			mFrag = (Fragment)new MenuFragment();
+			//mFrag = new GroupBrowseListFragment();
 		} else {
 			mFrag = (ListFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
 		}
@@ -113,11 +112,6 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		Toast.makeText(this, "show user account", Toast.LENGTH_SHORT).show();
 	}
 
-	@Override
-	public void onViewGroupAction(Uri groupUri) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	
 	

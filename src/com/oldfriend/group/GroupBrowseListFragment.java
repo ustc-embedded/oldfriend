@@ -44,26 +44,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Fragment to display the list of groups.
  */
 public class GroupBrowseListFragment extends Fragment
         implements OnFocusChangeListener, OnTouchListener {
-
-    /**
-     * Action callbacks that can be sent by a group list.
-     */
-    public interface OnGroupBrowserActionListener  {
-
-        /**
-         * Opens the specified group for viewing.
-         *
-         * @param groupUri for the group that the user wishes to view.
-         */
-        void onViewGroupAction(Uri groupUri);
-
-    }
 
     private static final String TAG = "GroupBrowseListFragment";
     private static final boolean DEBUG = true;
@@ -85,8 +73,6 @@ public class GroupBrowseListFragment extends Fragment
     private GroupBrowseListAdapter mAdapter;
     private boolean mSelectionVisible;
     private Uri mSelectedGroupUri;
-
-    private OnGroupBrowserActionListener mListener;
 
     public GroupBrowseListFragment() {
     }
@@ -114,6 +100,8 @@ public class GroupBrowseListFragment extends Fragment
         mListView.setOnFocusChangeListener(this);
         mListView.setOnTouchListener(this);
         mListView.setAdapter(mAdapter);
+        mListView.setChoiceMode(ListView. CHOICE_MODE_SINGLE);
+        mListView.setEmptyView(mEmptyView);
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -124,51 +112,22 @@ public class GroupBrowseListFragment extends Fragment
             }
         });
 
-        mListView.setEmptyView(mEmptyView);
         mCreateGroupButton = mRootView.findViewById(R.id.create_group);
         mCreateGroupButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
             	// TODO start an activity to create a Group
+            	Toast.makeText(mContext, "create new group", Toast.LENGTH_SHORT).show();
             }
         });
 
         return mRootView;
     }
-/*
-    public void setVerticalScrollbarPosition(int position) {
-        if (mVerticalScrollbarPosition != position) {
-            mVerticalScrollbarPosition = position;
-            configureVerticalScrollbar();
-        }
-    }
-
-    private void configureVerticalScrollbar() {
-        mListView.setVerticalScrollbarPosition(mVerticalScrollbarPosition);
-        mListView.setScrollBarStyle(ListView.SCROLLBARS_OUTSIDE_OVERLAY);
-        int leftPadding = 0;
-        int rightPadding = 0;
-        if (mVerticalScrollbarPosition == View.SCROLLBAR_POSITION_LEFT) {
-            leftPadding = mContext.getResources().getDimensionPixelOffset(
-                    R.dimen.list_visible_scrollbar_padding);
-        } else {
-            rightPadding = mContext.getResources().getDimensionPixelOffset(
-                    R.dimen.list_visible_scrollbar_padding);
-        }
-        mListView.setPadding(leftPadding, mListView.getPaddingTop(),
-                rightPadding, mListView.getPaddingBottom());
-    }*/
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mContext = activity;
-        try{
-        	mListener = (OnGroupBrowserActionListener) activity;
-        } catch (ClassCastException e){
-        	throw new ClassCastException(activity.toString()
-        			+ "must implement GroupBrowseListFragment.OnGroupBrouserActionListener");
-        }
     }
 
     @Override
@@ -179,14 +138,8 @@ public class GroupBrowseListFragment extends Fragment
 
     @Override
     public void onStart() {
-    	if (DEBUG) {
-    		Log.d(TAG, "onStart() begin");    		
-    	}
         getLoaderManager().initLoader(LOADER_GROUPS, null, mGroupLoaderListener);
         super.onStart();
-        if (DEBUG) {
-    		Log.d(TAG, "onStart() end");    		
-    	}
     }
 
     /**
@@ -230,10 +183,6 @@ public class GroupBrowseListFragment extends Fragment
         }
     }
 
-    public void setListener(OnGroupBrowserActionListener listener) {
-        mListener = listener;
-    }
-
     public void setSelectionVisible(boolean flag) {
         mSelectionVisible = flag;
         if (mAdapter != null) {
@@ -249,7 +198,7 @@ public class GroupBrowseListFragment extends Fragment
 
     private void viewGroup(Uri groupUri) {
         setSelectedGroup(groupUri);
-        if (mListener != null) mListener.onViewGroupAction(groupUri);
+        
     }
 
     public void setSelectedUri(Uri groupUri) {
@@ -304,4 +253,5 @@ public class GroupBrowseListFragment extends Fragment
         super.onSaveInstanceState(outState);
         outState.putParcelable(EXTRA_KEY_GROUP_URI, mSelectedGroupUri);
     }
+    
 }
