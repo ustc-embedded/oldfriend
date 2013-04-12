@@ -107,10 +107,16 @@ public class GroupBrowseListFragment extends Fragment
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GroupListItemViewCache groupListItem = (GroupListItemViewCache) view.getTag();
-                if (groupListItem != null) {
-                    viewGroup(groupListItem.getUri());
-                }
+//                GroupListItemViewCache groupListItem = (GroupListItemViewCache) view.getTag();
+//                if (groupListItem != null) {
+//                    viewGroup(groupListItem.getUri());
+//                }
+            	GroupMemberListAdapter member_adapter = new GroupMemberListAdapter(mContext);
+            	ListView list_view = (ListView) view.findViewById(R.id.list);
+            	list_view.setAdapter(member_adapter);
+            	GroupListItem item = mAdapter.getItem(position);
+            	
+            	
             }
         });
 
@@ -200,10 +206,10 @@ public class GroupBrowseListFragment extends Fragment
 
     private void viewGroup(Uri groupUri) {
         setSelectedGroup(groupUri);
-        FragmentTransaction ft = this.getChildFragmentManager().beginTransaction();
-		ft.replace(R.id.group_member_frame, new LocalContactFragment());
-		ft.addToBackStack(null);
-		ft.commit();
+//        FragmentTransaction ft = this.getChildFragmentManager().beginTransaction();
+//		ft.replace(R.id.group_member_frame, new LocalContactFragment());
+//		ft.addToBackStack(null);
+//		ft.commit();
     }
 
     public void setSelectedUri(Uri groupUri) {
