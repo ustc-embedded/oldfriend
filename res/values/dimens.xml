@@ -24,10 +24,10 @@
     <dimen name="photo_action_popup_width">400dip</dimen>
     
     <!-- for list item -->
-    <dimen name="list_item_padding_left">6dp</dimen>
-    <dimen name="list_item_padding_right">6dp</dimen>
-    <dimen name="list_item_padding_top">3dp</dimen>
-    <dimen name="list_item_padding_bottom">3dp</dimen>
+    <dimen name="list_item_padding_left">8dip</dimen>
+    <dimen name="list_item_padding_right">8dip</dimen>
+    <dimen name="list_item_padding_top">5dip</dimen>
+    <dimen name="list_item_padding_bottom">5dip</dimen>
     <dimen name="detail_min_line_item_height">20dp</dimen>
     
     <!-- for list fragment -->

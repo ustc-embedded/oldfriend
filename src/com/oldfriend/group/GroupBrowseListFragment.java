@@ -111,10 +111,10 @@ public class GroupBrowseListFragment extends Fragment
 //                if (groupListItem != null) {
 //                    viewGroup(groupListItem.getUri());
 //                }
-            	GroupMemberListAdapter member_adapter = new GroupMemberListAdapter(mContext);
-            	ListView list_view = (ListView) view.findViewById(R.id.list);
-            	list_view.setAdapter(member_adapter);
-            	GroupListItem item = mAdapter.getItem(position);
+//            	GroupMemberListAdapter member_adapter = new GroupMemberListAdapter(mContext);
+//            	ListView list_view = (ListView) view.findViewById(R.id.list);
+//            	list_view.setAdapter(member_adapter);
+//            	GroupListItem item = mAdapter.getItem(position);
             	
             	
             }

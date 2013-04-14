@@ -25,17 +25,17 @@ public final class GroupListItem {
     private final String mDataSet;
     private final long mGroupId;
     private final String mTitle;
-    private final boolean mIsFirstGroupInAccount;
+    private final boolean mIsFirstGroup;
     private final int mMemberCount;
 
     public GroupListItem(String accountName, String accountType, String dataSet, long groupId,
-            String title, boolean isFirstGroupInAccount, int memberCount) {
+            String title, boolean isFirstGroup, int memberCount) {
         mAccountName = accountName;
         mAccountType = accountType;
         mDataSet = dataSet;
         mGroupId = groupId;
         mTitle = title;
-        mIsFirstGroupInAccount = isFirstGroupInAccount;
+        mIsFirstGroup = isFirstGroup;
         mMemberCount = memberCount;
     }
 
@@ -67,7 +67,7 @@ public final class GroupListItem {
         return mMemberCount != -1;
     }
 
-    public boolean isFirstGroupInAccount() {
-        return mIsFirstGroupInAccount;
+    public boolean isFirstGroup() {
+        return mIsFirstGroup;
     }
 }

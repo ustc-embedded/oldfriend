@@ -29,13 +29,14 @@ import android.provider.ContactsContract.Groups;
  */
 public final class GroupListLoader extends CursorLoader {
 
-    private final static String[] COLUMNS = new String[] {
+    private final static String[] PROJECTION = new String[] {
         Groups.ACCOUNT_NAME,
         Groups.ACCOUNT_TYPE,
         Groups.DATA_SET,
         Groups._ID,
         Groups.TITLE,
         Groups.SUMMARY_COUNT,
+        Groups.SYSTEM_ID
     };
 
     public final static int ACCOUNT_NAME = 0;
@@ -44,17 +45,26 @@ public final class GroupListLoader extends CursorLoader {
     public final static int GROUP_ID = 3;
     public final static int TITLE = 4;
     public final static int MEMBER_COUNT = 5;
+    public final static int SYSTEM_ID = 6;
 
     private static final Uri GROUP_LIST_URI = Groups.CONTENT_SUMMARY_URI;
+    private static final String SELECTION = Groups.TITLE + " NOT NULL";
+//    private static final String SELECTION = 
+//    		Groups.DELETED + "=0 AND "+ 
+//    		Groups.FAVORITES + "=0 "+
+//    		Groups.ACCOUNT_NAME + " NOT NULL ";
+    private static final String[] SELECTION_ARGS = null;
+    private static final String SORT_ORDER = Groups.ACCOUNT_TYPE + ", " + Groups.ACCOUNT_NAME + ", " + Groups.DATA_SET + ", " +
+            Groups.TITLE + " COLLATE LOCALIZED ASC";
+    
 
     public GroupListLoader(Context context) {
-/*        super(context, GROUP_LIST_URI, COLUMNS, Groups.ACCOUNT_TYPE + " NOT NULL AND "
-                + Groups.ACCOUNT_NAME + " NOT NULL AND " + Groups.AUTO_ADD + "=0 AND " +
-                Groups.FAVORITES + "=0 AND " + Groups.DELETED + "=0", null,
-                Groups.ACCOUNT_TYPE + ", " + Groups.ACCOUNT_NAME + ", " + Groups.DATA_SET + ", " +
-                Groups.TITLE + " COLLATE LOCALIZED ASC");*/
-    	super(context, GROUP_LIST_URI, COLUMNS, null, null,
-                Groups.ACCOUNT_TYPE + ", " + Groups.ACCOUNT_NAME + ", " + Groups.DATA_SET + ", " +
-                Groups.TITLE + " COLLATE LOCALIZED ASC");
+    	super(context);
+    	setUri(GROUP_LIST_URI);
+    	setProjection(PROJECTION);
+    	setSelection(SELECTION);
+    	setSelectionArgs(SELECTION_ARGS);
+    	setSortOrder(SORT_ORDER);
+    	
     }
 }
