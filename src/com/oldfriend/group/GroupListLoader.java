@@ -48,16 +48,13 @@ public final class GroupListLoader extends CursorLoader {
     public final static int SYSTEM_ID = 6;
 
     private static final Uri GROUP_LIST_URI = Groups.CONTENT_SUMMARY_URI;
-    private static final String SELECTION = Groups.TITLE + " NOT NULL AND "+Groups.DELETED +"=0";
-//    private static final String SELECTION = 
-//    		Groups.DELETED + "=0 AND "+ 
-//    		Groups.FAVORITES + "=0 "+
-//    		Groups.ACCOUNT_NAME + " NOT NULL ";
+    private static final String SELECTION = 
+    		Groups.TITLE + " NOT NULL AND "
+    		+Groups.DELETED +"=0";
     private static final String[] SELECTION_ARGS = null;
     private static final String SORT_ORDER = Groups.ACCOUNT_TYPE + ", " + Groups.ACCOUNT_NAME + ", " + Groups.DATA_SET + ", " +
             Groups.TITLE + " COLLATE LOCALIZED ASC";
     
-
     public GroupListLoader(Context context) {
     	super(context);
     	setUri(GROUP_LIST_URI);
@@ -65,6 +62,5 @@ public final class GroupListLoader extends CursorLoader {
     	setSelection(SELECTION);
     	setSelectionArgs(SELECTION_ARGS);
     	setSortOrder(SORT_ORDER);
-    	
     }
 }

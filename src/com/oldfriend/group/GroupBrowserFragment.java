@@ -112,6 +112,9 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 		if(data == null ){
 			return;
 		}
+		if (DEBUG){
+			logCursor(data);
+		}
 		int id = loader.getId();
 		if (mAdapter == null){
 			if (isGroupLoader(id)){
@@ -129,7 +132,23 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 	}
 	
 	private boolean isGroupLoader(int id){
-		return id == -1;
+		return -1 == id;
+	}
+	
+	private void logCursor(Cursor cursor){
+		int origPos = cursor.getPosition();
+		int nCol = cursor.getColumnCount();
+		cursor.moveToFirst();
+		while(!cursor.isLast()){
+			int i;
+			for(i=0;i<nCol;i++) {
+				System.out.print(cursor.getColumnName(i)+":");
+				System.out.print(cursor.getString(i)+"  ");				
+			}
+			System.out.print('\n');
+			cursor.moveToNext();
+		}
+		cursor.moveToPosition(origPos);
 	}
 
 }

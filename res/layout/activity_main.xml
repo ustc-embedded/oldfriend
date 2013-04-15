@@ -10,7 +10,8 @@
 
     <Button
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
+        android:layout_centerVertical="true"
         android:id="@+id/start_oldfriend"
         android:text="@string/start_oldfriend" />
 

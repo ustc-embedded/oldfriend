@@ -21,6 +21,8 @@ public class GroupMemberListLoader extends CursorLoader{
 //        Data.PHOTO_URI,                         // 3
         Data.PHOTO_ID,                         // 3
         Data.LOOKUP_KEY,                        // 4
+        Phone.NUMBER,
+        GroupMembership.GROUP_ROW_ID
     };
 
     public static final int CONTACT_ID                   = 0;
@@ -30,9 +32,10 @@ public class GroupMemberListLoader extends CursorLoader{
     public static final int CONTACT_PHOTO_ID            = 3;
     public static final int CONTACT_LOOKUP_KEY           = 4;
     
-	private static final String SORT_ORDER = "sort_key" + " collate NOCASE ASC";
-	private static final Uri uri = Phone.CONTENT_URI;
-//	private static final Uri uri = Data.CONTENT_URI;
+//	private static final String SORT_ORDER = "sort_key" + " collate NOCASE ASC";
+	private static final String SORT_ORDER = GroupMembership.GROUP_ROW_ID + " COLLATE LOCALIZED ASC";
+//	private static final Uri uri = Phone.CONTENT_URI;
+	private static final Uri uri = Data.CONTENT_URI;
 	
 	private long mGroupId;
 	private long mGroupSysId;
@@ -44,11 +47,11 @@ public class GroupMemberListLoader extends CursorLoader{
 		mGroupSysId = groupSysId;
 		
 		setProjection(PROJECTION);
-		setSelection(createSelection());
-		setSelectionArgs(createSelectionArgs());
+//		setSelection(createSelection());
+//		setSelectionArgs(createSelectionArgs());
 		setSortOrder(SORT_ORDER);
-		setUri(createUri());
-//		setUri(uri);
+//		setUri(createUri());
+		setUri(uri);
 	}
 	
     private Uri createUri() {
