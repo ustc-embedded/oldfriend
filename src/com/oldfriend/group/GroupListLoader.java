@@ -48,7 +48,7 @@ public final class GroupListLoader extends CursorLoader {
     public final static int SYSTEM_ID = 6;
 
     private static final Uri GROUP_LIST_URI = Groups.CONTENT_SUMMARY_URI;
-    private static final String SELECTION = Groups.TITLE + " NOT NULL";
+    private static final String SELECTION = Groups.TITLE + " NOT NULL AND "+Groups.DELETED +"=0";
 //    private static final String SELECTION = 
 //    		Groups.DELETED + "=0 AND "+ 
 //    		Groups.FAVORITES + "=0 "+
