@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.View;
 import android.widget.CursorTreeAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.oldfriend.utilities.CursorLoaderHelper;
 import com.oldfriend.utilities.TwoLevelListViewFragment;
@@ -17,11 +19,15 @@ import com.oldfriend.utilities.TwoLevelListViewFragment;
 public class GroupBrowserFragment extends TwoLevelListViewFragment
 implements CursorLoaderHelper.OnLoadFinishedListener
 {
+	public interface GroupBrowserFragmentInterface{
+		void showMemberPage(Fragment newFragment);
+	}
 	private final static String TAG = "GroupBrowserFragment";
 	private final static boolean DEBUG = true;
 	
 	private ExpandableListView mListView;
 	private Context mContext;
+	private GroupBrowserFragmentInterface mListener;
 	private CursorTreeAdapter mAdapter;
 	LoaderManager mLoaderManager;
 	private final static int GROUP_LOADER = CursorLoaderHelper.TYPE_GROUP_LOADER;
@@ -32,6 +38,12 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 	@Override
 	public void onAttach(Activity activity) {
 		mContext = activity;
+		try{
+			mListener = (GroupBrowserFragmentInterface) activity;
+		}catch(ClassCastException e){
+			throw new ClassCastException(activity.toString()+
+					"you must implement GroupBrowserFragmentInterface");
+		}
 		super.onAttach(activity);
 	}
 
@@ -64,8 +76,29 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 
 	@Override
 	public void onGroupExpand(int groupPosition) {
-		// TODO Auto-generated method stub
 		
+		long groupId;
+		Cursor groupCursor = mAdapter.getCursor();
+		int origPos = groupCursor.getPosition();
+		groupCursor.moveToPosition(groupPosition);
+		groupId = groupCursor.getLong(GroupListLoader.GROUP_ID);
+		
+		groupCursor.moveToPosition(origPos);
+		
+		int loaderId = MEMBER_LOADER_ID_BASE+groupPosition;
+
+		Bundle arg = new Bundle();
+		arg.putLong(CursorLoaderHelper.GROUP_ID_ARG, groupId);
+		new CursorLoaderHelper(mContext,this,mLoaderManager,MEMBER_LOADER,loaderId,arg);
+		
+		super.onGroupExpand(groupPosition);
+	}
+	
+
+	@Override
+	public void onGroupCollapse(int groupPosition) {
+		mAdapter.setChildrenCursor(groupPosition, null);
+		super.onGroupCollapse(groupPosition);
 	}
 
 	@Override
@@ -81,19 +114,6 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 			mListView.collapseGroup(groupPosition);
 			return true;
 		}
-		
-		long groupId;
-		long groupSysId;
-		Cursor groupCursor = mAdapter.getCursor();
-		groupId = groupCursor.getLong(GroupListLoader.GROUP_ID);
-		groupSysId = groupCursor.getLong(GroupListLoader.SYSTEM_ID);
-		
-		int loaderId = MEMBER_LOADER_ID_BASE+groupPosition;
-
-		Bundle arg = new Bundle();
-		arg.putLong(CursorLoaderHelper.GROUP_ID_ARG, groupId);
-		arg.putLong(CursorLoaderHelper.GROUP_SYS_ID_ARG, groupSysId);
-		new CursorLoaderHelper(mContext,this,mLoaderManager,MEMBER_LOADER,loaderId,arg);
 
 		mListView.expandGroup(groupPosition);		
 		return true;
@@ -102,7 +122,15 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		// TODO Auto-generated method stub
+//		View view= v.findViewById(R.id.extra_buttons);
+//		view.setVisibility(View.VISIBLE);
+		GroupMemberItem tag = (GroupMemberItem)v.getTag();
+		Toast.makeText(mContext, tag.mDisplay_name, Toast.LENGTH_LONG).show();
+		GroupMemberPageFragment page = new GroupMemberPageFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(GroupMemberPageFragment.MEMBER_ITEM, tag);
+		page.setArguments(args);
+		mListener.showMemberPage(page);
 		return true;
 	}
 
@@ -149,6 +177,10 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 			cursor.moveToNext();
 		}
 		cursor.moveToPosition(origPos);
+	}
+	
+	public void setListener(GroupBrowserFragmentInterface listener){
+		mListener = listener;
 	}
 
 }

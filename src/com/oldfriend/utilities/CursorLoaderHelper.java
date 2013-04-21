@@ -56,7 +56,8 @@ public class CursorLoaderHelper {
 			throw new IllegalArgumentException(TAG + "got empty loader manager");
 		}
 		
-		mLoaderManager.initLoader(mLoaderId, null, mLoaderCallback);
+//		mLoaderManager.initLoader(mLoaderId, null, mLoaderCallback);
+		mLoaderManager.restartLoader(mLoaderId, null, mLoaderCallback);
 	}
 	
 	LoaderCallbacks<Cursor> mLoaderCallback = new LoaderCallbacks<Cursor>() {
@@ -70,17 +71,15 @@ public class CursorLoaderHelper {
 				}
 			} else if (mLoaderType == TYPE_MEMBER_LOADER){
 				long groupId ;
-				long groupSysId;
 				if (mLoaderArgs == null){
 					throw new IllegalArgumentException(TAG+"you should send groupId");
 				} else {
 					groupId = mLoaderArgs.getLong(GROUP_ID_ARG);
-					groupSysId = mLoaderArgs.getLong(GROUP_SYS_ID_ARG);
 				}
 				if(DEBUG){
-					Log.d(TAG, "creating member loader...groupId="+groupId+"system id="+groupSysId);
+					Log.d(TAG, "creating member loader...groupId="+groupId);
 				}
-				mLoader = new GroupMemberListLoader(mContext,groupId,groupSysId);
+				mLoader = new GroupMemberListLoader(mContext,groupId);
 			}
 			return mLoader;
 		}
