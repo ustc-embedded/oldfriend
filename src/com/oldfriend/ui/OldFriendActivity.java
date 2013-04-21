@@ -1,25 +1,27 @@
 package com.oldfriend.ui;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.oldfriend.group.GroupBrowserFragment;
+import com.oldfriend.group.GroupMemberPageFragment;
 import com.oldfriend.ui.slidingmenu.lib.SlidingMenu;
 import com.oldfriend.ui.slidingmenu.lib.app.SlidingFragmentActivity;
-import com.oldfriend.group.*;
 // TODO 横屏的时候有bug
 // TODO 没有实现单击图标打开侧边栏的功能
 public class OldFriendActivity extends SlidingFragmentActivity 
-			implements MenuFragment.OnMenuItemSelectedListener
+			implements MenuFragment.OnMenuItemSelectedListener,
+			GroupBrowserFragment.GroupBrowserFragmentInterface
 {
 	public static final String TAG = "SlidingFragmentActivity";
 	public static final boolean DEBUG = true;
-	
+
 	protected Fragment mFrag;
 	private int mTitleRes = R.string.oldfriend_contact;
 
@@ -34,7 +36,7 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		//setContentFragment(new SampleListFragment(),false);
 		//setContentFragment(new LocalContactFragment(),false);
 		//setContentFragment(new GroupBrowseListFragment(),false);
-		setContentFragment(new GroupBrowserFragment(),false);
+		setContentFragment(new GroupBrowserFragment(),false,null);
 		
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
@@ -42,9 +44,10 @@ public class OldFriendActivity extends SlidingFragmentActivity
 			mFrag = (Fragment)new MenuFragment();
 			//mFrag = new GroupBrowseListFragment();
 		} else {
-			mFrag = (ListFragment)this.getSupportFragmentManager().findFragmentById(R.id.menu_frame);
+			mFrag = (ListFragment)this.getSupportFragmentManager()
+					.findFragmentById(R.id.menu_frame);
 		}
-		setMenuFragment(mFrag, false);
+		setMenuFragment(mFrag, false,null);
 		
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
@@ -64,26 +67,26 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void setFragment(int containerResId, Fragment fr, boolean isAddToBackStack) {
+	private void setFragment(int containerResId, Fragment fr, boolean isAddToBackStack,String name){
 		FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
 		ft.replace(containerResId, fr);
 		
 		if (isAddToBackStack) {
-			ft.addToBackStack(null);
+			ft.addToBackStack(name);
 		}
 		
 		ft.commit();
 	}
 	
-	public void setContentFragment(Fragment fr, boolean isAddToBackStack) {
-		setFragment(R.id.content_frame,fr,isAddToBackStack);
+	public void setContentFragment(Fragment fr, boolean isAddToBackStack,String name) {
+		setFragment(R.id.content_frame,fr,isAddToBackStack,name);
 		if (DEBUG) {
 			Log.d(TAG,"set content Fragment");
 		}
 	}
 	
-	public void setMenuFragment(Fragment fr, boolean isAddToBackStack) {
-		setFragment(R.id.menu_frame,fr, isAddToBackStack);
+	public void setMenuFragment(Fragment fr, boolean isAddToBackStack, String name) {
+		setFragment(R.id.menu_frame,fr, isAddToBackStack,name);
 		if (DEBUG) {
 			Log.d(TAG,"set menu Fragment");
 		}
@@ -113,7 +116,10 @@ public class OldFriendActivity extends SlidingFragmentActivity
 		Toast.makeText(this, "show user account", Toast.LENGTH_SHORT).show();
 	}
 
-	
+	@Override
+	public void showMemberPage(Fragment newFragment) {
+		setContentFragment(newFragment, true, GroupMemberPageFragment.FRAGMENT_NAME);
+	}
 	
 	
 }

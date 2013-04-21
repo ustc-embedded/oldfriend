@@ -18,48 +18,36 @@ public class GroupMemberListLoader extends CursorLoader{
         Data.CONTACT_ID,                        // 0
         Data.RAW_CONTACT_ID,                    // 1
         Data.DISPLAY_NAME_PRIMARY,              // 2
-//        Data.PHOTO_URI,                         // 3
-        Data.PHOTO_ID,                         // 3
+        Data.PHOTO_ID,                       	// 3
         Data.LOOKUP_KEY,                        // 4
-        Phone.NUMBER,
-        GroupMembership.GROUP_ROW_ID
+        Data._ID,								// 5
+        Data.HAS_PHONE_NUMBER        			// 6
     };
 
     public static final int CONTACT_ID                   = 0;
     public static final int RAW_CONTACT_ID               = 1;
-    public static final int CONTACT_DISPLAY_NAME_PRIMARY = 2;
-//    public static final int CONTACT_PHOTO_URI            = 3;
+    public static final int CONTACT_DISPLAY_NAME		 = 2;
     public static final int CONTACT_PHOTO_ID            = 3;
-    public static final int CONTACT_LOOKUP_KEY           = 4;
+    public static final int LOOKUP_KEY           = 4;
+    public static final int DATA_ID		           		= 5;
+    public static final int HAS_PHONE_NUMBER           = 6;
     
-//	private static final String SORT_ORDER = "sort_key" + " collate NOCASE ASC";
-	private static final String SORT_ORDER = GroupMembership.GROUP_ROW_ID + " COLLATE LOCALIZED ASC";
-//	private static final Uri uri = Phone.CONTENT_URI;
+	private static final String SORT_ORDER = Data.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
 	private static final Uri uri = Data.CONTENT_URI;
 	
 	private long mGroupId;
-	private long mGroupSysId;
 	
 	
-	public GroupMemberListLoader(Context context, long groupId, long groupSysId){
+	public GroupMemberListLoader(Context context, long groupId){
 		super(context);
 		mGroupId = groupId;
-		mGroupSysId = groupSysId;
 		
 		setProjection(PROJECTION);
-//		setSelection(createSelection());
-//		setSelectionArgs(createSelectionArgs());
+		setSelection(createSelection());
+		setSelectionArgs(createSelectionArgs());
 		setSortOrder(SORT_ORDER);
-//		setUri(createUri());
 		setUri(uri);
 	}
-	
-    private Uri createUri() {
-        Uri uri = Data.CONTENT_URI;
-        uri = uri.buildUpon().appendQueryParameter(ContactsContract.DIRECTORY_PARAM_KEY,
-                String.valueOf(Directory.DEFAULT)).build();
-        return uri;
-    }
 
     private String createSelection() {
         StringBuilder selection = new StringBuilder();

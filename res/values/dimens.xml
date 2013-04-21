@@ -32,5 +32,11 @@
     
     <!-- for list fragment -->
     <dimen name="no_accounts_message_margin">10dp</dimen>
-
+    
+    <!-- for group member page photo -->
+	<dimen name="photo_width">100dip</dimen>
+	<dimen name="photo_height">100dip</dimen>
+	<dimen name="photo_padding">5dip</dimen>
+	
+	
    </resources>
