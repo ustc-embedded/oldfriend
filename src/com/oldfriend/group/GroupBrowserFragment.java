@@ -1,5 +1,7 @@
 package com.oldfriend.group;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,6 +26,7 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 	}
 	private final static String TAG = "GroupBrowserFragment";
 	private final static boolean DEBUG = true;
+	private final static boolean DBG_LOADER = false;
 	
 	private ExpandableListView mListView;
 	private Context mContext;
@@ -33,8 +36,14 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 	private final static int GROUP_LOADER = CursorLoaderHelper.TYPE_GROUP_LOADER;
 	private final static int GROUP_LOADER_ID = -1;
 	private final static int MEMBER_LOADER = CursorLoaderHelper.TYPE_MEMBER_LOADER;
+	
+	// loader id = groupPosition + MEMBER_LOADER_ID_BASE
 	private final static int MEMBER_LOADER_ID_BASE = 0;
 
+	private ArrayList<Integer> mExpandedGroups = new ArrayList<Integer>();
+	private int mSelectedGroup = -1;
+	private int mSelectedChild = -1;
+	
 	public GroupBrowserFragment(){
 		super();
 	}
@@ -47,9 +56,15 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 			throw new ClassCastException(activity.toString()+
 					"you must implement GroupBrowserFragmentInterface");
 		}
+		mLoaderManager = getLoaderManager();
 		super.onAttach(activity);
 	}
 
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+	}
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -57,13 +72,12 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 		if(mListView == null){
 			throw new RuntimeException("the expandable listview is null");
 		}
-//		mAdapter = new GroupBrowserAdapter()
-		mLoaderManager = getLoaderManager();
+
 		if (mAdapter != null){
 			mListView.setAdapter(mAdapter);
+		}else {
+			initFragment();		
 		}
-			initFragment();			
-		
 	}
 
 	private void initFragment(){
@@ -79,32 +93,20 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 	}
-
+	
 	@Override
 	public void onGroupExpand(int groupPosition) {
-		
-		long groupId;
-		Cursor groupCursor = mAdapter.getCursor();
-		int origPos = groupCursor.getPosition();
-		groupCursor.moveToPosition(groupPosition);
-		groupId = groupCursor.getLong(GroupListLoader.GROUP_ID);
-		
-		groupCursor.moveToPosition(origPos);
-		
-		int loaderId = MEMBER_LOADER_ID_BASE+groupPosition;
-
-		Bundle arg = new Bundle();
-		arg.putLong(CursorLoaderHelper.GROUP_ID_ARG, groupId);
-		new CursorLoaderHelper(mContext,this,mLoaderManager,MEMBER_LOADER,loaderId,arg);
-		
+		mExpandedGroups.add(Integer.valueOf(groupPosition));
 		super.onGroupExpand(groupPosition);
 	}
-	
-
+	/**
+	 * The children Cursor will be closed by CursorTreeAdapter,
+	 * And loader MUST be destroyed if the cursor is closed in adapter.
+	 */
 	@Override
 	public void onGroupCollapse(int groupPosition) {
-		mAdapter.setChildrenCursor(groupPosition, null);
-		super.onGroupCollapse(groupPosition);
+		mExpandedGroups.remove(Integer.valueOf(groupPosition));
+		mLoaderManager.destroyLoader(groupPosition + MEMBER_LOADER_ID_BASE);
 	}
 
 	@Override
@@ -120,18 +122,36 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 			mListView.collapseGroup(groupPosition);
 			return true;
 		}
-
-		mListView.expandGroup(groupPosition);		
+		
+		mListView.expandGroup(groupPosition);
+		loadGroup(groupPosition);
 		return true;
+	}
+	
+	private void loadGroup(int groupPosition) {
+		
+		long groupId;
+		Cursor groupCursor = mAdapter.getCursor();
+		int origPos = groupCursor.getPosition();
+		groupCursor.moveToPosition(groupPosition);
+		groupId = groupCursor.getLong(GroupListLoader.GROUP_ID);
+		
+		groupCursor.moveToPosition(origPos);
+		
+		int loaderId = MEMBER_LOADER_ID_BASE+groupPosition;
+
+		Bundle arg = new Bundle();
+		arg.putLong(CursorLoaderHelper.GROUP_ID_ARG, groupId);
+		new CursorLoaderHelper(mContext,this,mLoaderManager,MEMBER_LOADER,loaderId,arg);
 	}
 
 	@Override
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-//		View view= v.findViewById(R.id.extra_buttons);
-//		view.setVisibility(View.VISIBLE);
+		mSelectedChild = childPosition;
+		mSelectedGroup = groupPosition;
+		
 		GroupMemberItem tag = (GroupMemberItem)v.getTag();
-//		Toast.makeText(mContext, tag.mDisplay_name, Toast.LENGTH_LONG).show();
 		GroupMemberPageFragment page = new GroupMemberPageFragment();
 		Bundle args = new Bundle();
 		args.putSerializable(GroupMemberPageFragment.MEMBER_ITEM, tag);
@@ -140,19 +160,19 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 		return true;
 	}
 
-	// Called when a loader has finished loading
+	
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		if(data == null ){
 			return;
 		}
-		if (DEBUG){
+		if (DBG_LOADER){
 			logCursor(data);
 		}
 		int id = loader.getId();
 		if (mAdapter == null){
 			if (isGroupLoader(id)){
-				mAdapter = new GroupBrowserAdapter(data,mContext,true);
+				mAdapter = new GroupBrowserAdapter(data,mContext,false);
 				mListView.setAdapter(mAdapter);
 			}
 		} else {
@@ -161,6 +181,13 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 			} else if (data.getCount()>0){
 				id -= MEMBER_LOADER_ID_BASE;
 				mAdapter.setChildrenCursor(id, data);
+				/*if (id == mSelectedGroup) {
+					mListView.setSelectedChild(id, mSelectedChild, true);
+				}*/
+				// in case returned from back stack
+				if (!mListView.isGroupExpanded(id)){
+					mListView.expandGroup(id);
+				}	
 			}
 		}
 	}

@@ -89,8 +89,9 @@ public class CursorLoaderHelper {
 			if(DEBUG && data != null && loader != null){
 				Log.d(TAG, "loader" +loader.getId()+" finished, has "+ 
 			data.getCount()+"items");
-			}
+			
 			mListener.onLoadFinished(loader, data);
+			}
 		}
 
 		@Override

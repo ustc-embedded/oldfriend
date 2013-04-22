@@ -3,15 +3,9 @@ package com.oldfriend.group;
 import com.oldfriend.ui.R;
 import com.oldfriend.utilities.PhotoManager;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.Groups;
 import android.util.Log;
 import android.view.*;
@@ -79,20 +73,9 @@ public class GroupBrowserAdapter extends CursorTreeAdapter{
 		countText.setText(Integer.toString(cursor.getInt(countCol)));	
 	}
 
+	// Children cursor will be set by setChildren Cursor when asynchronously query finished
 	@Override
 	protected Cursor getChildrenCursor(Cursor groupCursor) {
-		Uri.Builder builder = Phone.CONTENT_URI.buildUpon();
-		int groupIdCol = groupCursor.getColumnIndex(Groups._ID);
-		ContentUris.appendId(builder, groupCursor.getLong(groupIdCol));
-
-//		Uri phoneNumbersUri = builder.build();
-
-		// The returned Cursor MUST be managed by us, so we use Activity's helper
-		// functionality to manage it for us.
-//		return managedQuery(phoneNumbersUri, new String[] {Phone._ID, Phone.NUMBER}, null, null, null);
-		if(DEBUG){
-			Log.d(TAG,"getChildrenCursor() called ");
-		}
 		return null;
 	}
 
@@ -105,29 +88,6 @@ public class GroupBrowserAdapter extends CursorTreeAdapter{
 		
 		View rootView = mInflater.inflate(
 				R.layout.group_member_list_item, parent, false);
-	/*
-		TextView nameText = (TextView)rootView.findViewById(R.id.people_name);
-		ImageView photoView = (ImageView)rootView.findViewById(R.id.people_photo);
-		
-		if(nameText == null){
-			return rootView;
-		}
-		int nameCol = cursor.getColumnIndex(Phone.DISPLAY_NAME);
-		int photoCol = cursor.getColumnIndex(Phone.PHOTO_ID);
-		
-		nameText.setText(cursor.getString(nameCol));
-		
-		long photoId = cursor.getLong(photoCol);
-		Bitmap nailPhoto = null;
-		if (photoId > 0) {
-			byte[] photo_bytes = PhotoManager.getNailPhotoById(mContext, photoId);
-			nailPhoto = BitmapFactory.decodeByteArray(photo_bytes, 0, photo_bytes.length);
-			
-		} else {
-			nailPhoto = mDefaultPhoto;
-		}
-		photoView.setImageBitmap(nailPhoto);
-		*/
 		return rootView;
 	}
 
@@ -139,17 +99,6 @@ public class GroupBrowserAdapter extends CursorTreeAdapter{
 		}
 		
 		View rootView = mInflater.inflate(R.layout.group_list_item, parent, false);
-		/*
-		TextView nameText = (TextView)rootView.findViewById(R.id.group_browser_group_name);
-		TextView countText = (TextView)rootView.findViewById(R.id.group_browser_member_count);
-		if(nameText == null || countText == null){
-			return rootView;
-		}
-		int nameCol = GroupListLoader.TITLE;
-		int countCol = GroupListLoader.MEMBER_COUNT;
-		nameText.setText(cursor.getString(nameCol));
-		countText.setText(Integer.toString(cursor.getInt(countCol)));
-		*/
 		return rootView;
 	}
 }
