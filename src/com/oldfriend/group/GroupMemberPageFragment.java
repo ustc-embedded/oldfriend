@@ -36,7 +36,6 @@ public class GroupMemberPageFragment extends Fragment{
 	public static final String MEMBER_ITEM = "member item";
 	public static final String SAVED_ITEM = "saved item";
 	public static final String FRAGMENT_NAME = "group member page fragment";
-
 	@Override
 	public void onAttach(Activity activity) {
 		mContext = activity;

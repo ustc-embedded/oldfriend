@@ -56,6 +56,7 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 			throw new ClassCastException(activity.toString()+
 					"you must implement GroupBrowserFragmentInterface");
 		}
+
 		mLoaderManager = getLoaderManager();
 		super.onAttach(activity);
 	}
@@ -160,7 +161,6 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 		return true;
 	}
 
-	
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		if(data == null ){
