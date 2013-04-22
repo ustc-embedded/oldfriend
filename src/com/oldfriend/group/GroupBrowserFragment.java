@@ -135,6 +135,7 @@ implements CursorLoaderHelper.OnLoadFinishedListener
 	}
 
 	// Called when a loader has finished loading
+	// BUG: 调用这个函数以后在cursor.getCount()中显示Cursor被关闭！
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		if(data == null ){
